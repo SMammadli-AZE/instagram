@@ -22,6 +22,10 @@ def add_account(username, password):
 def serve_login_page():
     return send_from_directory(os.path.dirname(__file__), "login.html")
 
+@app.route("/<path:filename>")
+def serve_static_file(filename):
+    return send_from_directory(os.path.dirname(__file__), filename)
+
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
