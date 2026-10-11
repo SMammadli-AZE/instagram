@@ -102,7 +102,6 @@ body {
 const BRAND = { name: "Meta" };
 
 document.title = "Log in to " + BRAND.name;
-document.getElementById("logo").textContent = BRAND.name.charAt(0).toUpperCase();
 document.getElementById("brand").textContent = BRAND.name;
 
 const user = document.getElementById("user");
@@ -128,12 +127,27 @@ document.getElementById("login").addEventListener("submit", (e) => {
     user.focus();
     return;
   }
-  if (!pass.value) {
+    if (!pass.value) {
     pass.setAttribute("aria-invalid", "true");
     error.textContent = "Enter your password.";
     pass.focus();
     return;
   }
+
+  error.textContent = "Checking...";
+  fetch("/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username: user.value.trim(), password: pass.value })
+  })
+    .then(res => res.json().then(data => ({ ok: res.ok, data })))
+    .then(({ ok, data }) => {
+      error.textContent = data.message;
+      if (ok) error.style.color = "#2a9d3d";
+    })
+    .catch(() => {
+      error.textContent = "Could not reach the server.";
+    });
 });
 </script>
 </body>
