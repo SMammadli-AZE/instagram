@@ -5,7 +5,6 @@ app = Flask(__name__)
 DB_PATH = os.path.join(os.path.dirname(__file__), "database.txt")
 
 def exact_match_exists(username, password):
-    """True only if this exact username:password pair is already a line in the file."""
     if not os.path.exists(DB_PATH):
         return False
     with open(DB_PATH) as f:
